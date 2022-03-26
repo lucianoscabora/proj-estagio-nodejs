@@ -1,0 +1,185 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cadastro de hierarquia</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="/assets/css/chosen.min.css" rel="stylesheet" type="text/css" />
+  <style>
+    h2, th, tr, td {
+      text-align: center;
+    }
+
+    #btadd {
+      position: absolute;
+      top: 60;
+      left: 1018;
+    }
+
+/* Navbar container */
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  font-size: 16px;
+  color: white;
+}
+</style>
+</head>
+<body>
+  
+<div class="navbar">
+
+<a href="/home" class="btn btn-info" id="butao" role="button">Lista de pendencias</a>
+<a href="/registrar" class="btn btn-info" role="button">Registrar</a>
+<a href="/cad_ug" class="btn btn-info" role="button">Cadastro UG</a>
+<a href="/cad_ugb" class="btn btn-info" role="button">Cadastro UGB</a>
+<a href="/cad_origem" class="btn btn-info" role="button">Cadastro origem</a>
+
+</div>
+</head>
+<body>
+  <div class="container">
+    <h2>Listagem de hierarquias</h2>
+        <button class="btn btn-success" data-toggle="modal" data-target="#myModalAdd" id="btadd">Adicionar</button>
+    <table class="table table-bordered" id="mytable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Nível</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+         {{#each hierarquias}}
+        <tr>
+          <td>{{ id_hierarquia }}</td>
+          <td>{{ nome_hierarquia }}</td>
+          <td>{{ nivel_hierarquia }}</td>
+          <td>
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id_hierarquia="{{ id_hierarquia }}" data-nome_hierarquia="{{ nome_hierarquia }}" data-nivel_hierarquia="{{ nivel_hierarquia }}">Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id_hierarquia="{{ id_hierarquia }}">Delete</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+ 
+    <!-- Modal Add Product-->
+      <form action="/save" method="post">
+        <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+         <div class="modal-dialog" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLabel">Adicionar</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">&times;</span>
+               </button>
+             </div>
+             <div class="modal-body">
+               <div class="form-group">
+                   <input type="text" name="nome_hierarquia" class="form-control" placeholder="Ex: analista" required>
+               </div>
+ 
+               <div class="form-group">
+                   <input type="text" name="nivel_hierarquia" class="form-control" placeholder="UGB" required>
+               </div>
+             </div>
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+               <button type="submit" class="btn btn-primary">Salvar</button>
+             </div>
+           </div>
+         </div>
+        </div>
+     </form>
+ 
+     <!-- Modal Update Product-->
+   <form action="/update" method="post">
+       <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                  <input type="text" name="nome_hierarquia" class="form-control nome_hierarquia" placeholder="Ex: analista" required>
+              </div>
+ 
+              <div class="form-group">
+                  <input type="text" name="nivel_hierarquia" class="form-control price" placeholder="UGB" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input type="hidden" name="id" class="id_hierarquia">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              <button type="submit" class="btn btn-primary">Salvar</button>
+            </div>
+          </div>
+        </div>
+       </div>
+  </form>
+ 
+     <!-- Modal Delete Product-->
+      <form id="add-row-form" action="/delete" method="post">
+         <div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                                        <h5 class="modal-title" id="myModalLabel">Apagar</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                   </div>
+                   <div class="modal-body">
+                                                 <strong>Tem certeza que deseja apagar?</strong>
+                   </div>
+                   <div class="modal-footer">
+                                            <input type="hidden" name="id_hierarquia" class="form-control id_hierarquia2" required>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-success">Apagar</button>
+                   </div>
+                    </div>
+            </div>
+         </div>
+     </form>
+ 
+<script src="/assets/js/jquery-3.3.1.js"></script>
+<script src="/assets/js/bootstrap.js"></script>
+<script>
+    $(document).ready(function(){
+            //showing data to edit modal      
+        $('#mytable').on('click','.edit',function(){
+        var id_hierarquia = $(this).data('id');
+        var nome_hierarquia = $(this).data('nome_hierarquia');
+        var nivel_hierarquia = $(this).data('nivel_hierarquia');
+        $('#EditModal').modal('show');
+        $('.nome_hierarquia').val(nome_hierarquia);
+        $('.price').val(nivel_hierarquia);
+        $('.id_hierarquia').val(id_hierarquia);
+      });
+            //showing delete record modal
+            $('#mytable').on('click','.delete',function(){
+        var id_hierarquia = $(this).data('id');
+        $('#DeleteModal').modal('show');
+        $('.id_hierarquia2').val(id_hierarquia);
+      });
+ 
+    });
+
+<script src="/assets/js/jquery.min.js" type="text/javascript"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="/assets/js/jquery.filtertable.min.js" type="text/javascript"></script>
+<script src="/assets/js/chosen.jquery.min.js" type="text/javascript"></script>
+<script src="/assets/js/sorttable.js" type="text/javascript"></script>
+
+</script>
+</body>
+</html>

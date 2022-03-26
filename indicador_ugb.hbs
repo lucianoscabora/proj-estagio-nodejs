@@ -1,0 +1,290 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Cadastro de indicadores por ugb</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link href="/assets/css/chosen.min.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/filtergrid.css">
+
+  <style>
+    h2, th, tr, td {
+      text-align: center;
+    }
+
+    #btadd {
+      position: absolute;
+      top: 60;
+      left: 944;
+    }
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+</style>
+</head>
+<body>
+  
+<div class="topnav">
+
+<a href="/home"> Lista de pendencias</a>
+<a href="/registrar"> Registrar - se</a>
+<a href="/cad_ugb"> Cadastro UGB</a>
+<a href="/cad_origem"> Origem</a>
+
+
+</div>
+
+<body>
+  <div class="container">
+    <h2>Listagem de indicadores por ugb</h2>
+    
+    <button class="btn btn-success" data-toggle="modal" id="btadd" data-target="#myModalAdd">Adicionar</button> 
+    <table class='filterable table' id="mytable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Indicador</th>
+          <th>UGB</th>
+          <th>Meta anual</th>
+          <th>Ano</th>
+          <th>UG</th>
+        </tr>
+      </thead>
+      <tbody>
+         {{#each indugb}}
+        <tr>
+          <td>{{ id_indugb }}</td>
+          <td>{{id_indicador}}</td>
+          <td>{{ meta_ano }}</td>
+          <td>{{ ano }} </td>
+          <td>{{valor_real}} </td>
+          <td>{{meta_mes}} </td>
+          <td>{{id_ug}}</td>
+          <td>
+            
+            <a href="javascript:void(0);" class="btn btn-sm btn-info edit" data-id_indugb="{{ id_indugb }}" data-id_indicador="{{ id_indicador }}" data-meta_ano="{{ meta_ano }}" 
+            data-ano="{{ano}}" data-valor_real="{{valor_real}}" data-meta_mes="{{meta_mes}}" data-id_ug="{{id_ug}}" >Edit</a>
+            <a href="javascript:void(0);" class="btn btn-sm btn-danger delete" data-id_indugb="{{ id_indugb }}">Apagar</a>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+ 
+
+    <!-- Modal adicionar UG -->
+  <form action="/cad_indugb" method="post">
+  <div class="modal" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cadastrar indicador por ugb</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+            <div class="form-group"></div>
+                 <select id="id_indicador" name="id_indicador" class="chosen-select">
+                 {{#each ind}}
+                 <option value="{{ id_indicador}}">{{ nome }}</option>
+                 {{/each}}
+                </select>
+                </div>
+
+                <div><label>UGB *</label></div>
+              <div class="form-group">
+              <select id="id_ugb" name="id_ugb" class="chosen-select">
+              {{#each ugbs}}
+              <option value="{{ id_ugb }}" >{{ nome_ugb }}</option>
+              {{/each}}
+             </select>
+              </div>
+
+              <div><label>UG *</label></div>
+              <div class="form-group">
+              <select id="id_ug" name="id_ug" class="chosen-select">
+              {{#each ugs}}
+              <option value="{{ id_ug }}" >{{ nome_ug }}</option>
+              {{/each}}
+             </select>
+              </div>
+
+               <div class="form-group">
+                    <label>Meta anual:</label>
+                   <input type="date" name="ano" class="form-control" placeholder="Ano..." required>
+               </div>
+             
+             <div class="modal-footer">
+               <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+               <button type="submit" class="btn btn-primary">Salvar</button>
+             </div>
+             
+           </div>
+         </div>
+        </div>
+      </div>
+      </div>
+     </form>
+
+    
+ 
+     <!-- Modal Editar UG-->
+   <form action="/edit_indugb" method="post">
+       <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+              <button type="button" class="Fechar" data-dismiss="modal" aria-label="Fechar">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          <div class="form-group"></div>
+                 <select id="id_indicador" name="id_indicador" class="chosen-select">
+                 {{#each ind}}
+                 <option value="{{ id_indicador}}">{{ nome }}</option>
+                 {{/each}}
+                </select>
+                </div>
+
+                <div><label>UGB *</label></div>
+              <div class="form-group">
+              <select id="id_ugb" name="id_ugb" class="chosen-select">
+              {{#each ugbs}}
+              <option value="{{ id_ugb }}" >{{ nome_ugb }}</option>
+              {{/each}}
+             </select>
+              </div>
+
+              <div><label>UG *</label></div>
+              <div class="form-group">
+              <select id="id_ug" name="id_ug" class="chosen-select">
+              {{#each ugs}}
+              <option value="{{ id_ug }}" >{{ nome_ug }}</option>
+              {{/each}}
+             </select>
+              </div>
+
+               <div class="form-group">
+                    <label>Meta anual:</label>
+                   <input type="date" name="ano" class="form-control" placeholder="Ano..." required>
+               </div>
+
+            <div class="modal-footer">
+              <input type="hidden" name="id_indugb" class="id_indugb">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+              <button type="submit" class="btn btn-primary">Editar</button>
+            </div>
+          </div>
+        </div>
+       </div>
+  </form>
+ 
+     <!-- Modal Deletar-->
+      <form id="add-row-form" action="/del_indugb" method="post">
+         <div class="modal fade" id="ApagarModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+               <div class="modal-content">
+                   <div class="modal-header">
+                                        <h5 class="modal-title" id="myModalLabel">Deletar</h5>
+                      <button type="button" class="Fechar" data-dismiss="modal" aria-label="Fechar"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                    <strong>Tem certeza que deseja apagar?</strong>
+                    </div>
+                    <div class="modal-footer">
+                                            <input type="hidden" name="id_indugb" class="form-control id_indugb" required>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button type="submit" class="btn btn-success">Apagar</button>
+                   </div>
+                </div>
+            </div>
+         </div>
+     </form>
+
+
+  <!-- Alerta Erros -->
+<div class="modal" id="ErroModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Mensagem do Sistema</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <strong id="MensagemErro">{{ erro }}</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="/assets/js/jquery.filtertable.min.js" type="text/javascript"></script>
+<script src="/assets/js/chosen.jquery.min.js" type="text/javascript"></script>
+<script src="/assets/js/sorttable.js" type="text/javascript"></script>
+<script src="/public/js/tablefilter.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/tablefilter_all.js"> </script>
+<script>
+    $(document).ready(function(){
+            //showing data to edit modal      
+        $('#mytable').on('click','.edit',function(){
+        var id_indicador = $(this).data('id_indicador');
+        var id_ugb = $(this).data('id_ugb');
+        var ano = $(this).data('ano');
+        var meta_ano = $(this).data('meta_ano');
+        var id_ug = $(this).data('id_ug');
+        $('#EditModal').modal('show');
+        $('.id_indicador').val(id_indicador);
+        $('.id_ugb').val(id_ugb);
+        $('.ano').val(ano);
+        $('.meta_ano').val(meta_ano);
+        $('.id_ug').val(id_ug);
+      });
+            //showing Apagar record modal
+        $('#mytable').on('click','.delete',function(){
+        var id_indugb = $(this).data('id_indugb');
+        $('#ApagarModal').modal('show');
+        $('.id_indugb2').val(id_indugb);
+      });
+ 
+    });
+
+    </script>
+
+</body>
+</html>

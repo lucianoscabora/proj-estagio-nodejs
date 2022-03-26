@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Meu perfil</title>
+<link href="/assets/css/chosen.min.css" rel="stylesheet" type="text/css" />
+  <link href="/assets/css/bootstrap.css" rel="stylesheet" type="text/css" />
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/filtergrid.min.css"> -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/filtergrid.css"> -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/TF_Themes/Default/TF_Default.css">
+
+  <style>
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.titulo {
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+</style>
+</head>
+<body>
+  
+<div class="topnav">
+
+<a href="/home"> Lista de pendencias</a>
+<a href="/cad_origem"> Origem</a>
+<a href="/cad_ug"> Cadastro UG</a>
+<a href="/cad_ugb"> Cadastro UGB</a>
+
+</div>
+
+<p class="titulo">Perfil de usuário - TIX Gestão</p>
+
+
+    <form id="princpal" class="principal">
+    {{#each usuarios}}
+    
+    <div>
+    <div class="form-group col-md-2">
+      <label for="login">Login: </label>
+      <input type="text" class="form-control" id="login_usuar"  value="{{login_usuar}}" readonly>
+    </div>
+    </div>
+
+  <div class="form-group col-md-2">
+    <label for="hierarquia">Seu cargo: </label>
+    <input type="text" class="form-control" id="id_hierarquia" value="{{nome_hierarquia}}" placeholder=" " readonly>
+  </div>
+
+  <div class="form-group col-md-2">
+    <label for="UG">Sua UG: </label>
+    <input type="text" class="form-control" id="id_ug" value="{{nome_ug}}" placeholder=" " readonly>
+  </div>
+
+  <div>
+    <div class="form-group col-md-2">
+      <label for="UGB">Sua UGB: </label>
+      <input type="text" class="form-control" id="id_ugb" value="{{nome_ugb}}" id="id_ugb" readonly>
+    </div>
+
+  </div>
+{{/each}}
+</form>
+
+
+
+
+<script src="/assets/js/jquery.min.js" type="text/javascript"></script>
+<script src="/assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="/assets/js/jquery.filtertable.min.js" type="text/javascript"></script>
+<script src="/assets/js/chosen.jquery.min.js" type="text/javascript"></script>
+<script src="/assets/js/sorttable.js" type="text/javascript"></script>
+<script src="/assets/js/tablefilter.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tablefilter/2.5.0/tablefilter_all.js"> </script>
+
+
+<script>
+
+var password = document.getElementById("senha"), confirma_senha = document.getElementById("confirma_senha");
+
+function validatePassword(){
+  if(senha.value != confirma_senha.value) {
+    confirma_senha.setCustomValidity("As senhas não batem! ");
+  } else {
+    confirma_senha.setCustomValidity('');
+  }
+}
+
+senha.onchange = validatePassword;
+confirma_senha.onkeyup = validatePassword;
+
+</script>
+
+</body>
+</html>
+
+
+
+

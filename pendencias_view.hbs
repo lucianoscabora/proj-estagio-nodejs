@@ -1,0 +1,497 @@
+<html lang="en">
+
+<head>
+
+  <style>
+    #navigation ul {
+    padding:0px;
+    margin:0px;
+    background-color:#EDEDED;
+    list-style:none;
+}
+
+#navigation ul li { display: inline; }
+
+#navigation ul li a {
+    padding: 2px 10px;
+    display: inline-block;
+
+    /* visual do link */
+    background-color:#EDEDED;
+    color: #333;
+    text-decoration: none;
+    border-bottom:3px solid #EDEDED;
+}
+
+#navigation ul li a:hover {
+    background-color:#d6d6d6;
+    color: #6D6D6D;
+    border-bottom:3px solid #0f0101;
+}
+
+body {
+    margin: 0px;
+}
+  </style>
+
+  <meta charset="utf-8">
+  <title>Lista de pendências</title>
+  
+  <h1>Gestão de equipe minimalista</h1>
+
+<nav id="navigation">
+  <ul> 
+<li> <a href="/home">Home</a> </li>
+<li> <a href="/registrar">Registrar-se</a> </li>
+<li> <a href="/cad_origem">Nova origem</a> </li>
+<li> <a href="/cad_ug">Nova UG</a> </li>
+<li> <a href="/cad_ugb">Nova UGB</a> </li>
+<!-- <a href="/checklist_view"> Checklist view</a> -->
+<!-- <a href="/perfil_usuario"> Meu perfil </a> -->
+<li> <a href="javascript:void(0);" id="ButtonAdd">Adicionar pendência</a> </li>
+</ul> 
+</nav>
+
+
+</head>
+
+<body>
+
+  
+  <div>
+    <h2>Lista de pendências</h2>
+     
+    <div>
+    
+    </div>
+  <table id="tabela">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data inclusão</th>
+        <th>Área do negócio</th>
+        <th>Tipo Reunião</th>
+        <th>Assunto</th>
+        <th>Descrição</th>
+        <th>Responsável</th>
+        <th>Até dia</th>
+        <th>Feito dia</th>
+        <th>Status</th>
+        <th>Follow-up</th>
+        <th>Dias de atraso</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each pendencias}}
+      <tr>
+        <td>{{ id_tarefa }}</td>
+        <td>{{ dtpen }}</td>
+        <td> {{ugb}}</td>
+        <td>{{ origem }}</td>
+        <td>{{ assunto_pend }}</td>
+        <td>{{ descr_pend }}</td>
+        <td>{{ responsavel }}</td>
+        <td>{{ dtprev }}</td>
+        <td>{{ dtfim }}</td>
+        <td class="td_status {{#switch status_pend }}
+        {{#case 'Em Andamento'}}greenBG{{/case}}
+        {{#case 'Atrasado'}}redBG{{/case}}
+        {{#case 'Finalizado'}}blueBG{{/case}}
+        {{#case 'Concluido c/ Atraso'}}blueBG{{/case}}
+        {{/switch}}"> {{ status_pend }} </td>
+        <td>{{ obser_pend }}</td>
+        <td>{{ dtatr}}</td>
+        <td style="text-align:center">
+          <a href="javascript:void(0);" class="edit" data-id_tarefa="{{id_tarefa}}" data-dtpen="{{ dtpen }}"
+          data-ugb="{{ ugb }}" data-origem="{{ origem }}" data-assunto_pend="{{ assunto_pend }}"
+          data-descr_pend="{{ descr_pend }}" data-responsavel="{{ responsavel }}" data-dtprev="{{ dtprev }}"
+          data-dtfim="{{ dtfim }}" data-status_pend="{{ status_pend }}" data-obser_pend="{{ obser_pend }}">Editar</a>
+          <a href="javascript:void(0);" class="delete" data-id_tarefa="{{ id_tarefa }}">Deletar</a>
+
+          <a href="javascript:void(0);" class="updObser" data-id_tarefa="{{id_tarefa}}" data-obser_pend="{{ obser_pend }}">Follow-up</a>
+        </td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+
+<!--Adicionar pendências -->
+<form action="/save" method="post">
+  <div id="adicionar">
+    <div>
+      <div>
+        <div>
+          <h5>Adicionar nova pendência</h5>
+          <button type="button" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div>
+          <div><label>Data da inclusão *</label></div>
+          <div>
+            <input type="date" name="dtpen" placeholder=" "
+            required>
+          </div>
+          <label>Tipo de reunião *</label>
+          <div >
+            <select id="origem" name="origem">
+              {{#each origens}}
+              <option value="{{ id_origem }}" >{{ nome_origem }}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <label>Área de negócio *</label>
+          <div >
+            <select id="ugb" name="ugb">
+              {{#each ugbs}}
+              <option value="{{ id_ugb }}" >{{ nome_ugb }}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div><label>Assunto *</label></div>
+          <div >
+            <input type="text" name="assunto_pend" placeholder=" " required>
+          </div>
+          <div><label>Descrição *</label></div>
+          <div >
+            <input type="text" name="descr_pend" placeholder=" "
+            required>
+          </div>
+          <div><label>Responsável *</label></div>
+          <div> 
+            <select id="nome_resp" name="nome_resp" data-placeholder="Selecione o responsável" placeholder=" ">
+              <option value=""></option>
+              {{#each usuarios}}
+              <option value="{{ id_usuario }}" >{{ nome_usuar }}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div><label>Até dia *</label></div>
+          <div ></div>
+            <input type="date" name="dtprev" placeholder=" " required>
+          </div>
+          <div><label>Feito dia *</label></div>
+          <div >
+            <input type="date" name="dtfim" placeholder=" ">
+          </div>
+          <div><label>Status</label></div>
+          <div >
+            <select id="status" name="status">
+              {{#each status}}
+              <option value="{{ id_status }}" >{{ nome_status }}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div><label>Observações</label></div>
+          <div >
+            <input type="text" name="obser_pend" placeholder=" ">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" data-dismiss="modal">Fechar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Editar pendencias-->
+<form action="/update" method="post">
+  <div class="modal" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div><label>Data da inclusão</label></div>
+          <div >
+            <input type="date" id="ed_dtpen" name="dtpen" readonly="true" required>
+          </div>
+          <div><label>Tipo de reunião: </label></div>
+          <div >
+            <select id="ed_origem" name="origem">
+              {{#each origens}}
+              <option value="{{ id_origem}}">{{ nome_origem }}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div><label>Assunto</label></div>
+          <div >
+            <input type="text" id="ed_assunto_pend" name="assunto_pend" placeholder=" " required>
+          </div>
+          <div><label>Descrição</label></div>
+          <div >
+            <input type="text" id="ed_descr_pend" name="descr_pend" placeholder=" " required>
+          </div>
+          <div><label>Responsável</label></div>
+          <div >
+            <select id="ed_nome_resp" name="nome_resp" data-placeholder="Selecione o responsável" required>
+              <option value=""></option>
+              {{#each usuarios}}
+              <option value="{{ id_usuario }}" >{{ nome_usuar }}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div><label>Até dia</label></div>
+          <div >
+            <input type="date" id="ed_dtprev" name="dtprev" >
+          </div>
+          <div><label>Feito dia</label></div>
+          <div >
+            <input type="date" id="ed_dtfim" name="dtfim" readonly="true" >
+          </div>
+          <div><label>Status</label></div>
+          <div >
+            <select id="ed_status" name="status">
+              {{#each status}}
+              <option value="{{ id_status }}" >{{ nome_status }}</option>
+              {{/each}}
+            </select>
+          </div>
+          <div><label>Observações</label></div>
+          <div >
+            <input type="text" id="ed_obser_pend" name="obser_pend" placeholder=" ">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="id_tarefa" name="id_tarefa" required>
+          <button type="button" data-dismiss="modal">Fechar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Deletar Pendencias-->
+<form id="add-row-form" action="/delete" method="post">
+  <div class="modal" id="deletar" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">Deletar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <strong>Tem certeza que deseja apagar este registro?</strong>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="del_id_tarefa" name="id_tarefa" required>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+          <button type="submit" class="btn btn-success">Deletar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+<!-- Editar observações-->
+<form action="/updateObs" method="post">
+  <div class="modal" id="editarObservacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Editar follow-up</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- <div><label>Follow-up</label></div> -->
+
+          <div >
+        <textarea class="form-control purple-border" id="upd_obser_pend" name="obser_pend" rows="3"></textarea>
+      </div>    
+         
+         <!-- <div >
+            <input type="text" id="upd_obser_pend" name="obser_pend" placeholder=" ">
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="upd_tarefa" name="id_tarefa" required>
+          <button type="button" data-dismiss="modal">Fechar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<!-- Alerta Erros -->
+<div class="modal" id="ErroModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Mensagem do Sistema</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <strong id="MensagemErro">{{ erro }}</strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+function ConverteData(data) {
+  var dia  = data.split("/")[0];
+  var mes  = data.split("/")[1];
+  var ano  = data.split("/")[2];
+  return ano + '-' + ("0"+mes).slice(-2) + '-' + ("0"+dia).slice(-2);
+}
+$(document).ready(function () {
+  $('.chosen-select').chosen({width: '100%', no_results_text: "Usuário não foi encontrado"});
+  {{#if erro}}
+  $('#ErroModal').modal('show');
+  {{/if}}
+  var insercao = {{ insercao }};
+  var alteracao = {{ alteracao }};
+  var exclusao = {{ exclusao }};
+
+  $('#ButtonAdd').on('click', function(e){
+    e.preventDefault();
+    if (insercao){
+      $('#adicionar').modal('show');
+    }else{
+      $('#MensagemErro').html('Usuário não possui permissão para inserir');
+      $('#ErroModal').modal('show');
+    }
+  });
+
+  $('#tabela').on('click', '.edit', function (e) {
+    e.preventDefault();
+    if (alteracao){
+      $('#id_tarefa').val($(this).data('id_tarefa'));
+      $('#ed_dtpen').val(ConverteData($(this).data('dtpen')));
+      $("#ed_origem option:contains('"+ $(this).data('origem') +"')").attr('selected', 'selected');
+      $('#ed_assunto_pend').val($(this).data('assunto_pend'));
+      $('#ed_descr_pend').val($(this).data('descr_pend'));
+      $(".chosen-select").chosen("destroy");
+      $("#ed_nome_resp option:contains('"+ $(this).data('responsavel') +"')").attr('selected', 'selected');
+      $('.chosen-select').chosen({width: '100%', no_results_text: "Usuário não foi encontrado"});
+      $('#ed_dtprev').val(ConverteData($(this).data('dtprev')));
+      $('#ed_dtfim').val(ConverteData($(this).data('dtfim')));
+      $("#ed_status option:contains('"+ $(this).data('status_pend') +"')").attr('selected', 'selected');
+      $('#ed_obser_pend').val($(this).data('obser_pend'));
+      $('#EditModal').modal('show');
+    }else{
+      $('#MensagemErro').html('Usuário não possui permissão para alterar');
+      $('#ErroModal').modal('show');
+    }
+  });
+  $('#tabela').on('click', '.delete', function (e) {
+    e.preventDefault();
+    if (exclusao){
+      var id = $(this).data('id_tarefa');
+      $('#deletar').modal('show');
+      $('#del_id_tarefa').val(id);
+    }else{
+      $('#MensagemErro').html('Usuário não possui permissão para excluir');
+      $('#ErroModal').modal('show');
+    }
+  });
+  $('#tabela').on('click', '.updObser', function (e) {
+    e.preventDefault();
+    if (alteracao){
+      $('#upd_tarefa').val($(this).data('id_tarefa'));
+      $('#upd_obser_pend').val($(this).data('obser_pend'));
+      $('#editarObservacao').modal('show');
+    }else{
+      $('#MensagemErro').html('Usuário não possui permissão para alterar');
+      $('#ErroModal').modal('show');
+    }
+  });
+  $('#tabela').filterTable({ minRows: 0 });
+  $('#FiltroStatus').on('change', function(e){
+    e.preventDefault();
+    var opcao = $(this).val();
+    if (opcao == 0){
+      $('#tabela tbody tr').show();
+    }else{
+      $('#tabela tbody tr').hide();
+      switch (opcao){
+        case '1':
+          $('#tabela tbody tr td.td_status:contains(Em Andamento)').parent().show();
+          break;
+        case '2':
+          $('#tabela tbody tr td.td_status:contains(Atrasado)').parent().show();
+          break;
+        case '3':
+          $('#tabela tbody tr td.td_status:contains(Finalizado)').parent().show();
+          $('#tabela tbody tr td.td_status:contains(Concluido c/ Atraso)').parent().show();
+          break;
+      }
+    }
+  });
+  $('#ugb').on('change', function(e){
+    e.preventDefault();
+    //var opcao = $(this).val();
+    var opcao = $(this).val();
+    if (opcao == 0){
+      $('#tabela tbody tr').show();
+    }else{
+      $('#tabela tbody tr').hide();
+      switch (opcao){
+        case '1':
+          $('#tabela tbody tr td.td_ugb:contains(Nenhum)').parent().hide();
+          break;
+        case '2':
+          $('#tabela tbody tr td.td_ugb:contains(TIX)').parent().show();
+          break;
+        case '3':
+          $('#tabela tbody tr td.td_ugb:contains(TI Sistemas)').parent().show();
+          break;
+          case '4':
+          $('#tabela tbody tr td.td_ugb:contains(TIX Infra)').parent().show();
+          break;
+
+      }
+    }
+  });
+});
+</script>
+
+<!--
+<script language="javascript" type="text/javascript">  
+    var tf01 = new TF('tabela');  
+    tf01.AddGrid();  
+</script> -->
+
+<script language="javascript" type="text/javascript">  
+    var table3Filters = {
+        col_1: "hidden",
+        col_2: "select",  
+        col_3: "select",
+        col_4: "select",
+        col_6: "select",
+        col_9: "select",
+        col_12: "hidden",
+        col_11: "hidden",
+        col_10: "hidden",
+        col_8: "hidden",
+        col_7: "hidden",
+        col_5: "hidden"
+    }  
+    var tf03 = new TF("tabela",1,table3Filters);
+    tf03.AddGrid();  
+</script>  
+
+</body>
+</html>
